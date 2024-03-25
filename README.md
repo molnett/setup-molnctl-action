@@ -26,7 +26,7 @@ jobs:
 
 ### Using a specific version of molnctl
 
-```
+```yaml
     - name: Molnctl Setup
       uses: molnett/setup-molnctl-action@v1
       with:
