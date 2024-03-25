@@ -1,0 +1,48 @@
+name: 'Setup Molnctl'
+description: 'Downloads and configures molnctl'
+inputs:
+  version:
+    description: 'The version of molnctl to install, see https://github.com/molnett/molnctl/releases'
+    required: true
+    default: 'v0.1.6'
+  api-token-client-id:
+    description: 'Go to https://app.molnett.org/organization/settings/api-tokens to create a token'
+    required: true
+  api-token-client-secret:
+    description: 'The corresponding client secret'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+  - name: Check Runner OS
+    if: ${{ runner.os != 'Linux' }}
+    shell: bash
+    run: |
+      echo "::error title=⛔ error hint::Support Linux Only"
+      exit 1
+  - name: Install Molnctl
+    shell: bash
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VERSION: ${{ inputs.version }}
+      MOLNETT_CLIENT_ID: ${{ inputs.api-token-client-id }}
+      MOLNETT_CLIENT_SECRET: ${{ inputs.api-token-client-secret }}
+    run: |
+      gh release download --repo molnett/molnctl -p 'molnctl' $VERSION
+      chmod +x molnctl
+      sudo mv molnctl /usr/bin
+      mkdir ~/.config/molnett
+      MOLNETT_TOKEN=$(curl https://auth.molnett.org/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
+      EXPIRY=$(date -u -d "+24 hours" +"%Y-%m-%dT%H:%M:%S.%NZ")
+      cat << EOF > ~/.config/molnett/config.json
+      {
+        "token": {
+          "access_token": "$MOLNETT_TOKEN",
+          "refresh_token": null,
+          "expiry": "$EXPIRY"
+        },
+        "url": "https://api.molnett.org"
+      }
+      EOF
+      molnctl orgs list
+      echo "molnctl sucessfully installed! We recommend choosing a default org using 'molnctl orgs switch <your_org>'"
