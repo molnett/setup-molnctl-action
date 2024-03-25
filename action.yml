@@ -1,5 +1,8 @@
 name: 'Setup Molnctl'
 description: 'Downloads and configures molnctl'
+branding:
+  icon: 'download-cloud'
+  color: 'orange'
 inputs:
   version:
     description: 'The version of molnctl to install, see https://github.com/molnett/molnctl/releases'
