@@ -1,4 +1,4 @@
-name: 'Setup Molnctl'
+name: 'Molnett - Setup Molnctl'
 description: 'Downloads and configures molnctl'
 branding:
   icon: 'download-cloud'
