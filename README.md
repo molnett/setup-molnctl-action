@@ -16,8 +16,7 @@ jobs:
       with:
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
         api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
-    - name: Switch default org
-      run: molnctl orgs switch <your_org>
+        default-org: <your-org>
     - name: Cleanup
       run: rm -r ~/.config/molnett
 ```
@@ -33,6 +32,7 @@ jobs:
         version: v0.1.6
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
         api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
+        default-org: <your-org>
 ```
 
 ## OS support

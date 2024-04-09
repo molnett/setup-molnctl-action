@@ -14,6 +14,9 @@ inputs:
   api-token-client-secret:
     description: 'The corresponding client secret'
     required: true
+  default-org:
+    description: 'Set this org as default after installation'
+    required: true
 runs:
   using: 'composite'
   steps:
@@ -49,3 +52,8 @@ runs:
       EOF
       molnctl orgs list
       echo "molnctl sucessfully installed! We recommend choosing a default org using 'molnctl orgs switch <your_org>'"
+  - name: Set Default Org
+    shell: bash
+    env:
+      ORG: ${{ inputs.default-org }}
+    run: molnctl orgs switch $ORG
