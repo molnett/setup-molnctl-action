@@ -18,6 +18,7 @@ jobs:
       with:
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
         api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
+        default-org: personal
     - name: Check molnctl usage
       run: molnctl orgs list
     - name: Cleanup

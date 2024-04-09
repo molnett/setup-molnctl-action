@@ -16,7 +16,7 @@ inputs:
     required: true
   default-org:
     description: 'Set this org as default after installation'
-    required: false
+    required: true
 runs:
   using: 'composite'
   steps:
@@ -53,7 +53,6 @@ runs:
       molnctl orgs list
       echo "molnctl sucessfully installed! We recommend choosing a default org using 'molnctl orgs switch <your_org>'"
   - name: Set Default Org
-    if: ${{ success() && inputs.default-org != null && inputs.default-org != '' }}
     shell: bash
     env:
       ORG: ${{ inputs.default-org }}
