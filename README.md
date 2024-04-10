@@ -17,6 +17,14 @@ jobs:
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
         api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
         default-org: <your-org>
+    - name: Build & Push Image to Molnett
+      run: |
+        molnctl auth docker
+        IMAGE_NAME=`molnctl svcs image-name --update-manifest molnett.yaml`
+        docker buildx build . -t $IMAGE_NAME
+        docker push $IMAGE_NAME
+    - name: Deploy Service
+      run: molnctl deploy
     - name: Cleanup
       run: rm -r ~/.config/molnett
 ```

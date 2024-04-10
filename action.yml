@@ -7,7 +7,7 @@ inputs:
   version:
     description: 'The version of molnctl to install, see https://github.com/molnett/molnctl/releases'
     required: true
-    default: 'v0.1.6'
+    default: 'v0.1.9'
   api-token-client-id:
     description: 'Go to https://app.molnett.org/organization/settings/api-tokens to create a token'
     required: true
@@ -34,9 +34,9 @@ runs:
       MOLNETT_CLIENT_ID: ${{ inputs.api-token-client-id }}
       MOLNETT_CLIENT_SECRET: ${{ inputs.api-token-client-secret }}
     run: |
-      gh release download --repo molnett/molnctl -p 'molnctl' $VERSION
-      chmod +x molnctl
-      sudo mv molnctl /usr/bin
+      gh release download --repo molnett/molnctl -p 'molnctl*' $VERSION
+      chmod +x molnctl-x86_64-unknown-linux-gnu
+      sudo mv molnctl-x86_64-unknown-linux-gnu /usr/bin/molnctl
       mkdir ~/.config/molnett
       MOLNETT_TOKEN=$(curl https://auth.molnett.org/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
       EXPIRY=$(date -u -d "+24 hours" +"%Y-%m-%dT%H:%M:%S.%NZ")
@@ -51,7 +51,7 @@ runs:
       }
       EOF
       molnctl orgs list
-      echo "molnctl sucessfully installed! We recommend choosing a default org using 'molnctl orgs switch <your_org>'"
+      echo "molnctl sucessfully installed!"
   - name: Set Default Org
     shell: bash
     env:
