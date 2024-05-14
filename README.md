@@ -12,7 +12,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Molnctl Setup
-      uses: molnett/setup-molnctl-action@v1
+      uses: molnett/setup-molnctl-action@v2
       with:
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
         api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
@@ -35,7 +35,7 @@ jobs:
 
 ```yaml
     - name: Molnctl Setup
-      uses: molnett/setup-molnctl-action@v1
+      uses: molnett/setup-molnctl-action@v2
       with:
         version: v0.1.6
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
