@@ -19,7 +19,7 @@ inputs:
     required: true
   cell:
     description: 'Default cell'
-    default: 'se-ume:
+    default: 'se-ume'
     required: false
 runs:
   using: 'composite'
