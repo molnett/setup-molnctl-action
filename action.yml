@@ -36,7 +36,6 @@ runs:
         VERSION: ${{ inputs.version }}
         MOLNETT_CLIENT_ID: ${{ inputs.api-token-client-id }}
         MOLNETT_CLIENT_SECRET: ${{ inputs.api-token-client-secret }}
-        MOLNETT_API_URL: https://api.${{ inputs.cell }}.molnett.app
         CELL: ${{ inputs.cell }}
       run: |
         gh release download --repo molnett/molnctl -p 'molnctl*' $VERSION
@@ -44,8 +43,8 @@ runs:
         sudo mv molnctl-x86_64-unknown-linux-gnu /usr/bin/molnctl
         mkdir ~/.config/molnett
         if [ -z "$CELL" ]; then
-          MOLNETT_API_URL=https://api.molnett.app
-          MOLNETT_TOKEN=$(curl https://auth.molnett.app/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
+          MOLNETT_API_URL=https://api.molnett.org
+          MOLNETT_TOKEN=$(curl https://auth.molnett.org/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
         else
           MOLNETT_API_URL=https://api.$CELL.molnett.app
           MOLNETT_TOKEN=$(curl https://auth.$CELL.molnett.app/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
