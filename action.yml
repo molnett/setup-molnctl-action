@@ -1,28 +1,27 @@
-name: 'Molnett - Setup Molnctl'
-description: 'Downloads and configures molnctl'
+name: "Molnett - Setup Molnctl"
+description: "Downloads and configures molnctl"
 branding:
-  icon: 'download-cloud'
-  color: 'orange'
+  icon: "download-cloud"
+  color: "orange"
 inputs:
   version:
-    description: 'The version of molnctl to install, see https://github.com/molnett/molnctl/releases'
+    description: "The version of molnctl to install, see https://github.com/molnett/molnctl/releases"
     required: false
-    default: 'v0.3.2'
+    default: "v0.3.2"
   api-token-client-id:
-    description: 'Go to https://app.molnett.org/organization/settings/api-tokens to create a token'
+    description: "Go to https://app.molnett.org/organization/settings/api-tokens to create a token"
     required: true
   api-token-client-secret:
-    description: 'The corresponding client secret'
+    description: "The corresponding client secret"
     required: true
   default-org:
-    description: 'Set this org as default after installation'
+    description: "Set this org as default after installation"
     required: true
   cell:
-    description: 'Default cell'
-    default: 'se-ume'
+    description: "Default cell"
     required: false
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Check Runner OS
       if: ${{ runner.os != 'Linux' }}
@@ -44,7 +43,13 @@ runs:
         chmod +x molnctl-x86_64-unknown-linux-gnu
         sudo mv molnctl-x86_64-unknown-linux-gnu /usr/bin/molnctl
         mkdir ~/.config/molnett
-        MOLNETT_TOKEN=$(curl https://auth.$CELL.molnett.app/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
+        if [ -z "$CELL" ]; then
+          MOLNETT_API_URL=https://api.molnett.app
+          MOLNETT_TOKEN=$(curl https://auth.molnett.app/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
+        else
+          MOLNETT_API_URL=https://api.$CELL.molnett.app
+          MOLNETT_TOKEN=$(curl https://auth.$CELL.molnett.app/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
+        fi
         EXPIRY=$(date -u -d "+24 hours" +"%Y-%m-%dT%H:%M:%S.%NZ")
         cat << EOF > ~/.config/molnett/config.json
         {
