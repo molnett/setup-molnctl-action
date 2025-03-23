@@ -38,7 +38,7 @@ jobs:
     - name: Molnctl Setup
       uses: molnett/setup-molnctl-action@v2
       with:
-        version: v0.5.0
+        version: v0.5.1
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
         api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
         default-tenant: <your-tenant>
