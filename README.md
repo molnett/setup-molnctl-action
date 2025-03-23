@@ -17,6 +17,7 @@ jobs:
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
         api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
         default-org: <your-org>
+        default-project: <your-project>
     - name: Build & Push Image to Molnett
       run: |
         molnctl auth docker
@@ -37,10 +38,11 @@ jobs:
     - name: Molnctl Setup
       uses: molnett/setup-molnctl-action@v2
       with:
-        version: v0.1.6
+        version: v0.4.0
         api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
         api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
         default-org: <your-org>
+        default-project: <your-project>
 ```
 
 ## OS support

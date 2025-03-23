@@ -18,8 +18,9 @@ jobs:
         with:
           api-token-client-id: ${{ secrets.MOLNETT_CLIENT_ID }}
           api-token-client-secret: ${{ secrets.MOLNETT_CLIENT_SECRET }}
-          default-org: molnett
+          default-tenant: molnett
+          default-project: molnett
       - name: Check molnctl usage
-        run: molnctl orgs list
+        run: molnctl tenants list
       - name: Cleanup
         run: rm -r ~/.config/molnett

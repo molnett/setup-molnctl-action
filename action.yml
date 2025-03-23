@@ -7,19 +7,23 @@ inputs:
   version:
     description: "The version of molnctl to install, see https://github.com/molnett/molnctl/releases"
     required: false
-    default: "v0.4.0"
+    default: "v0.5.0"
   api-token-client-id:
     description: "Go to https://console.molnett.app/organization/settings/api-tokens to create a token"
     required: true
   api-token-client-secret:
     description: "The corresponding client secret"
     required: true
-  default-org:
-    description: "Set this org as default after installation"
+  default-tenant:
+    description: "Set this tenant as default after installation"
+    required: true
+  default-project:
+    description: "Set this project as default after installation"
     required: true
   cell:
     description: "Default cell"
     required: false
+    default: "se-ume"
 runs:
   using: "composite"
   steps:
@@ -42,13 +46,10 @@ runs:
         chmod +x molnctl-x86_64-unknown-linux-gnu
         sudo mv molnctl-x86_64-unknown-linux-gnu /usr/bin/molnctl
         mkdir ~/.config/molnett
-        if [ -z "$CELL" ]; then
-          MOLNETT_API_URL=https://api.molnett.org
-          MOLNETT_TOKEN=$(curl https://auth.molnett.org/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
-        else
-          MOLNETT_API_URL=https://api.$CELL.molnett.app
-          MOLNETT_TOKEN=$(curl https://auth.$CELL.molnett.app/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
-        fi
+
+        MOLNETT_API_URL=https://api.$CELL.molnett.app
+        MOLNETT_TOKEN=$(curl https://auth.$CELL.molnett.app/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
+
         EXPIRY=$(date -u -d "+24 hours" +"%Y-%m-%dT%H:%M:%S.%NZ")
         cat << EOF > ~/.config/molnett/config.json
         {
@@ -60,10 +61,15 @@ runs:
           "url": "$MOLNETT_API_URL"
         }
         EOF
-        molnctl orgs list
+        molnctl tenants list
         echo "molnctl sucessfully installed!"
-    - name: Set Default Org
+    - name: Set Default Tenant
       shell: bash
       env:
-        ORG: ${{ inputs.default-org }}
-      run: molnctl orgs switch $ORG
+        TENANT: ${{ inputs.default-tenant }}
+      run: molnctl tenants switch $TENANT
+    - name: Set Default Project
+      shell: bash
+      env:
+        PROJECT: ${{ inputs.default-project }}
+      run: molnctl projects switch $PROJECT
