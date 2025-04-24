@@ -7,7 +7,7 @@ inputs:
   version:
     description: "The version of molnctl to install, see https://github.com/molnett/molnctl/releases"
     required: false
-    default: "v0.7.0"
+    default: "v0.8.0"
   api-token-client-id:
     description: "Go to https://console.molnett.app/organization/settings/api-tokens to create a token"
     required: true
