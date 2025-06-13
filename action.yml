@@ -7,7 +7,7 @@ inputs:
   version:
     description: "The version of molnctl to install, see https://github.com/molnett/molnctl/releases"
     required: false
-    default: "v0.9.0"
+    default: "v0.10.1"
   api-token-client-id:
     description: "Go to https://console.molnett.app/organization/settings/api-tokens to create a token"
     required: true
@@ -36,15 +36,14 @@ runs:
     - name: Install Molnctl
       shell: bash
       env:
-        GH_TOKEN: ${{ github.token }}
         VERSION: ${{ inputs.version }}
         MOLNETT_CLIENT_ID: ${{ inputs.api-token-client-id }}
         MOLNETT_CLIENT_SECRET: ${{ inputs.api-token-client-secret }}
         CELL: ${{ inputs.cell }}
       run: |
-        gh release download --repo molnett/molnctl -p 'molnctl*' $VERSION
-        chmod +x molnctl-x86_64-unknown-linux-gnu
-        sudo mv molnctl-x86_64-unknown-linux-gnu /usr/bin/molnctl
+        curl https://github.com/molnett/molnctl/releases/download/$VERSION/molnctl-x86_64-unknown-linux-musl -sSf -o molnctl
+        chmod +x molnctl
+        sudo mv molnctl /usr/bin/molnctl
         mkdir ~/.config/molnett
 
         MOLNETT_API_URL=https://api.$CELL.molnett.app
