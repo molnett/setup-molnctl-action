@@ -44,7 +44,7 @@ runs:
         curl https://github.com/molnett/molnctl/releases/download/$VERSION/molnctl-x86_64-unknown-linux-musl -sSf -o molnctl
         chmod +x molnctl
         sudo mv molnctl /usr/bin/molnctl
-        mkdir ~/.config/molnett
+        mkdir -p ~/.config/molnett
 
         MOLNETT_API_URL=https://api.$CELL.molnett.app
         MOLNETT_TOKEN=$(curl https://auth.$CELL.molnett.app/oauth2/token -X POST --data "client_id=$MOLNETT_CLIENT_ID&grant_type=client_credentials&client_secret=$MOLNETT_CLIENT_SECRET" | jq -r .access_token)
